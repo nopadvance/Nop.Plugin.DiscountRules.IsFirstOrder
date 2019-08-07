@@ -1,0 +1,11 @@
+﻿{
+	"Group": "Discount requirements",
+	"FriendlyName": "Must be customer's first order",
+	"SystemName": "DiscountRequirement.IsFirstOrder",
+	"Version": "1.0",
+	"SupportedVersions": [ "4.20" ],
+	"Author": "Nopadvance team",
+	"DisplayOrder": 1,
+	"FileName": "Nop.Plugin.DiscountRules.IsFirstOrder.dll",
+	"Description": "This plugin allows you to allow discount only on customer's first order."
+}

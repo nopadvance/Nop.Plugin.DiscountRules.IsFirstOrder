@@ -1,0 +1,55 @@
+﻿@model Nop.Plugin.DiscountRules.IsFirstOrder.Models.RequirementModel
+@{
+    Layout = "";
+}
+
+<script>
+    $(document).ready(function () {
+		$('#savefirstorderrequirement@(Model.RequirementId)').click(function () {
+            var discountId = @Model.DiscountId;
+            var requirementId = @Model.RequirementId;
+
+            var postData = {
+                discountId: discountId,
+                discountRequirementId: requirementId,
+				isApplied: true
+            };
+            addAntiForgeryToken(postData);
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.Action("Configure", "DiscountRulesIsFirstOrder"))",
+                data: postData,
+                success: function (data, textStatus, jqXHR) {
+                    $('#pnl-save-requirement-result@(Model.RequirementId)').fadeIn("slow").delay(1000).fadeOut("slow");
+                    //notify parent if it's a new requirement
+                    @if (Model.RequirementId == 0)
+                    {
+                        <text>$("#discountRequirementContainer").trigger('nopnewdiscountruleadded', [data.NewRequirementId]);</text>
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+					$("#savefirstorderrequirementAlert").click();
+                }
+            });
+        });
+    });
+</script>
+
+<div class="form-group">
+	<div class="col-md-3"></div>
+    <div class="col-md-9 requirement-data-col">
+        <div class="requirement-data-buttons">
+            <input type="button" id="savefirstorderrequirement@(Model.RequirementId)" class="btn btn-primary" value="@T("Admin.Common.Save")"/>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-offset-3 col-md-9 requirement-messages-col">
+        <div id="pnl-save-requirement-result@(Model.RequirementId)" style="display: none;" class="text-green margin-t-5">
+            @T("Admin.Promotions.Discounts.Requirements.Saved")
+        </div>
+    </div>
+</div>
+<nop-alert asp-alert-id="savefirstorderrequirementAlert" asp-alert-message="@T("Admin.Promotions.Discounts.Requirements.FailedToSave")" />
